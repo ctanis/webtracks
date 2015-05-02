@@ -8,9 +8,9 @@ var gulp = require("gulp"),
     browserSync = require("browser-sync");
 
 // Useful globs in handy variables:
-var markupSrc = ["source/markup/*.jade", "!source/markup/_layout.jade", "!source/markup/partials{,/**}"],
-    stylesSrc = ["source/stylesheets/*.styl", "!source/stylesheets/partials{,/**}", "!source/stylesheets/modules{,/**}"],
-    jsSrc     = ["source/javascript/*.js", "!source/javascript/vendor{,/**}"],
+var markupSrc = ["source/markup/**/*.jade", "!source/markup/_layout.jade", "!source/markup/partials{,/**}"],
+    stylesSrc = ["source/stylesheets/**/*.styl", "!source/stylesheets/partials{,/**}", "!source/stylesheets/modules{,/**}"],
+    jsSrc     = ["source/javascript/**/*.js", "!source/javascript/vendor{,/**}"],
     imagesSrc = "source/images/**/*.*",
     auxSrc    = ["source/**/*.json"], // This glob is for dummy data files and such
     rawSrc    = ["source/markup/raw-html/*.html"];
