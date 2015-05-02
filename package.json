@@ -1,0 +1,21 @@
+{
+  "name": "source",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alfonso Gómez-Arzola",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^1.1.2",
+    "gulp": "~3.8.5",
+    "gulp-autoprefixer": "0.0.8",
+    "gulp-changed": "~0.4.0",
+    "gulp-jade": "^0.6.1",
+    "gulp-stylus": "^1.0.2",
+    "nib": "^1.0.3"
+  }
+}

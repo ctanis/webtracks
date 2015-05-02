@@ -1,0 +1,15 @@
+{
+  "name": "adagio",
+  "version": "0.1.0",
+  "authors": [
+    "Alfonso Gómez-Arzola <alfonso@mrkp.co>"
+  ],
+  "description": "New Project",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "dependencies": {
+    "modernizr": "~2.8.1"
+  }
+}

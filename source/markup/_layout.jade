@@ -1,0 +1,12 @@
+doctype html
+html.no-js(lang="en")
+  block vars
+  head
+    include partials/_document_head
+
+  body
+    #main.main
+      include partials/_site_header
+      block templates
+      include partials/_site_footer
+    script(src="/javascript/main.js")
