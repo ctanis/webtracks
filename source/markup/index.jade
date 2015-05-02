@@ -1,6 +1,23 @@
 extends _layout
 block vars
-  -var pageTitle = "A Brand New Project!"
+  - var pageTitle = 'It’s completely innocuous, we swear.'
 block templates
-  p.
-    Hello, World!
+  #tracks.tracks
+    article#track-1.track
+      fieldset#track-1-controls.track-controls
+        h2.track-label Track Name
+        input(type='range' data-track='1' name='track-1-vol' min='-3' max='2' step='0.001' value='0')#track-1-vol.track-vol
+        .track-effect
+          label(for='track-1-reverb-toggle') Reverb
+          input(type='checkbox' data-track='1' name='track-1-reverb-toggle' id='track-1-reverb-toggle' value='on').track-reverb-toggle
+          input(type='range' data-track='1' name='track-1-reverb-level' id='track-1-reverb-level' min='0' max='1' step='0.001' value='0').track-reverb-level
+        .track-effect
+          label(for='track-1-echo-toggle') Echo
+          input(type='checkbox' data-track='1' name='track-1-echo-toggle' id='track-1-echo-toggle' value='on').track-echo-toggle
+          input(type='range' data-track='1' name='track-1-echo-level' id='track-1-echo-level' min='0' max='1' step='0.001' value='0').track-echo-level
+        .track-options
+          input(type='checkbox' data-track='1' name='track-1-mute' id='track-1-mute' value='on').track-mute-toggle
+          label(for='track-1-mute') Mute
+      section#track-1-waveform
+        //- canvas
+        | Waveform goes here.
