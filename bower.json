@@ -11,6 +11,8 @@
   "private": true,
   "dependencies": {
     "modernizr": "~2.8.1",
-    "Recorderjs": "*"
+    "Recorderjs": "*",
+    "jquery": "1.11.2",
+    "handlebars": "~3.0.3"
   }
 }
