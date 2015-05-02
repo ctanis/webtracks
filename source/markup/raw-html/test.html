@@ -1,15 +1,16 @@
 <html>
   <head>
     <script type="text/javascript" src="/javascript/track.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/bower_components/Recorderjs/recorder.js"></script>
     <script>
-      window.onload=go;
+      window.onload=track_init;
     </script>
   </head>
   
   <body>
 
-    Hello
+    Webtraxxxxxxx
     <br>
 
     <div id="recordMic">
@@ -25,8 +26,8 @@
       <input id="rec" type=submit value="cancel" onClick="recordCancel()" />
     </div>
 
-    <input type=submit value="play" onClick="play()"><br>
-    <input type=submit value="stop" onClick="stop()">
+    <input type=submit value="play" onClick="wt.play()"><br>
+    <input type=submit value="stop" onClick="wt.stop()">
 
   </body>
 </html>
