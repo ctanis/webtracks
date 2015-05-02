@@ -12,7 +12,9 @@ var markupSrc = ["source/markup/*.jade", "!source/markup/_layout.jade", "!source
     stylesSrc = ["source/stylesheets/*.styl", "!source/stylesheets/partials{,/**}", "!source/stylesheets/modules{,/**}"],
     jsSrc     = ["source/javascript/*.js", "!source/javascript/vendor{,/**}"],
     imagesSrc = "source/images/**/*.*",
-    auxSrc    = ["source/**/*.json"]; // This glob is for dummy data files and such
+    auxSrc    = ["source/**/*.json"], // This glob is for dummy data files and such
+    rawSrc    = ["source/markup/raw-html/*.html"];
+
 
 // Aaaand we start taskin’
 // By default, we build, serve, and watch for changes:
@@ -22,6 +24,7 @@ gulp.task("default", ["build", "browser-sync"], function () {
   gulp.watch(jsSrc[0], ["javascript"]);
   gulp.watch(imagesSrc, ["images"]);
   gulp.watch(auxSrc, ["auxiliary"]);
+  gulp.watch(rawSrc, ["raw-html"]);
 });
 
 // Build the site:
@@ -73,6 +76,34 @@ gulp.task("auxiliary", function () {
 });
 
 // Init browser-sync & watch generated files:
+gulp.task("test-sync", function () {
+  browserSync.init(null, {
+    server: {
+      baseDir: "./build"
+    },
+    files: [
+      "build/**/*.html",
+      "build/**/*.css",
+      "build/**/*.js"
+    ],
+      browser: "google chrome",
+      startPath: "/test.html"
+  });
+});
+
+
+gulp.task("test", ["test-sync"], function() {
+  gulp.watch(markupSrc[0], ["markup"]);
+  gulp.watch(stylesSrc[0], ["styles"]);
+  gulp.watch(jsSrc[0], ["javascript"]);
+  gulp.watch(imagesSrc, ["images"]);
+  gulp.watch(auxSrc, ["auxiliary"]);
+  gulp.watch(rawSrc, ["raw-html"]);
+});
+
+
+
+// Init browser-sync & watch generated files:
 gulp.task("browser-sync", function () {
   browserSync.init(null, {
     server: {
@@ -83,6 +114,6 @@ gulp.task("browser-sync", function () {
       "build/**/*.css",
       "build/**/*.js"
     ],
-    browser: "google chrome"
+      browser: "google chrome"
   });
 });

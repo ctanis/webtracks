@@ -1,1 +1,33 @@
-test.html
+<html>
+  <head>
+    <script type="text/javascript" src="/javascript/track.js"></script>
+    <script type="text/javascript" src="/bower_components/Recorderjs/recorder.js"></script>
+    <script>
+      window.onload=go;
+    </script>
+  </head>
+  
+  <body>
+
+    Hello
+    <br>
+
+    <div id="recordMic">
+      <input id="rec" type=submit value="record new" onClick="recordNew()" />
+    </div>
+    <div id="stopMic">
+      <input id="rec" type=submit value="stop recording" onClick="recordStop()" />
+    </div>
+    <div id="saveMic">
+      <input id="recname" type=text value="new" />
+      <input id="rec" type=submit value="save recording"
+             onClick="recordSave()" />
+      <input id="rec" type=submit value="cancel" onClick="recordCancel()" />
+    </div>
+
+    <input type=submit value="play" onClick="play()"><br>
+    <input type=submit value="stop" onClick="stop()">
+
+  </body>
+</html>
+
