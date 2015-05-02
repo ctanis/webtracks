@@ -38,6 +38,13 @@ io.on('connection', function(socket) {
         trax[msg.id]=msg;
     });
 
+    socket.on('removeTrack', function(track_id) {
+
+        delete trax[track_id];
+        socket.broadcast.emit('removeTrack', track_id);
+    });
+
+
     // console.log('a user connected');
 
     // socket.on('disconnect', function() {

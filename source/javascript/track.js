@@ -113,6 +113,10 @@ function AudioTrack() {
         this.sample_end=this.buffer.length;
     };
 
+    this.length = function() {
+        return sample_end - sample_start;
+    };
+
 
     this.play = function(sample) {
 
@@ -131,6 +135,7 @@ function AudioTrack() {
 
 
     this.draw = function(canvas) {
+        this.canvas = canvas;
         canvas.height=200;      //fix me
         canvas.width=600;
         var delta = this.buffer.length / 600;
@@ -226,6 +231,11 @@ function WebTrax() {
         this.addTrack(track, msg.id);
     }.bind(this));
 
+    this.socket.on('removeTrack', function(track_id) {
+        console.log('removing track ' + track_id);
+        this.removeTrack(track_id, true);
+    }.bind(this));
+
 
 }
 
@@ -261,17 +271,25 @@ WebTrax.prototype.addTrack = function(track, track_id)
 
     // replace with UI callback?
     var canvas = document.createElement('canvas');
-    canvas.id="track"+this.trax.length;
+    canvas.id='wf'+track_id;
     track.draw(canvas);
     document.body.appendChild(canvas);
 };
 
 
-WebTrax.prototype.removeTrack = function(track_id)
+WebTrax.prototype.removeTrack = function(track_id, remote)
 {
+    // remove waveform canvas -- fix to work with UI
+
+    var canvasid = 'wf'+track_id;
+    document.body.removeChild(document.getElementById(canvasid));
+
     delete this.trax[track_id];
 
-    this.socket.emit('removeTrack', track_id);
+    if (! remote)
+    {
+        this.socket.emit('removeTrack', track_id);
+    }
 }
 
 
