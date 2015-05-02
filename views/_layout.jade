@@ -1,0 +1,16 @@
+doctype html
+html.no-js(lang="en")
+  block vars
+  head
+    include partials/_document_head
+
+  body
+    #main.main
+      block templates
+    script(src='/bower_components/jquery/dist/jquery.min.js')
+    script(src='/bower_components/handlebars/handlebars.min.js')
+    script(src='/bower_components/Recorderjs/recorder.js')
+    script(src='/javascript/ui.js')
+    script(src='/javascript/track.js')
+    script(src='/javascript/main.js')
+    script(src='/javascript/controls.js')

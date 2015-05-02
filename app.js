@@ -1,10 +1,25 @@
 var express = require('express');
-
 var app = express();
 var trax={};
+var stylus = require('stylus')
+var nib = require('nib')
+
+app.set('views', './views');
+app.set('view engine', 'jade');
+
+app.use(stylus.middleware({
+    src: __dirname + '/source/stylesheets',
+    dest: __dirname + '/public/stylesheets',
+    compile: function (str, path) {
+        return stylus(str).set('filename', path).use(nib())
+    }
+}))
 
 app.use(express.static('public'));
-app.use('/javascript', express.static('javascript'));
+
+app.get('/', function (req, res) {
+    res.render('index')
+});
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
