@@ -10,6 +10,7 @@
   "homepage": "",
   "private": true,
   "dependencies": {
-    "modernizr": "~2.8.1"
+    "modernizr": "~2.8.1",
+    "Recorderjs": "*"
   }
 }

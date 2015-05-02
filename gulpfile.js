@@ -76,6 +76,7 @@ gulp.task("browser-sync", function () {
       "build/**/*.html",
       "build/**/*.css",
       "build/**/*.js"
-    ]
+    ],
+    browser: "google chrome"
   });
 });
