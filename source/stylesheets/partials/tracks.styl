@@ -1,7 +1,7 @@
 .track
   position relative
   overflow hidden
-  height 8em
+  height $track-height
   margin-right $track-controls-width - 2
   background-color #eee
   clearfix()
@@ -42,18 +42,30 @@
   &.open
     left $track-controls-width - 1
 
+.track-waveform
+  position relative
+  height $track-height
+  margin-left $track-controls-width
+
+.track-remove
+  position absolute
+  top 0
+  right 0
+
 .position-indicator
   position fixed
   top 0
-  bottom 0
+  height 0
+  overflow visible
   left $track-controls-width
   right $track-controls-width - 2
   z-index 100
-  .needle
-    position absolute
-    top 0
-    left 0%
-    bottom 0
-    width 2px
-    background-color #222
-    box-shadow 0 0 1em $light-gray
+
+.needle
+  position absolute
+  top 0
+  left 0%
+  height 100000px
+  width 1px
+  background-color #222
+  // box-shadow 0 0 1em $light-gray

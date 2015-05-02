@@ -29,6 +29,7 @@ function track_init() {
         socket = null;
     }
 
+    ui.init();
 }
 
 

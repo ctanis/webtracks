@@ -5,30 +5,6 @@ block templates
   #tracks.tracks
     .position-indicator
       .needle
-    script#track-template(type='text/template')
-      form.track(id='{{trackId}}')
-        fieldset.track-controls
-          h2.track-label {{trackTitle}}
-
-          label(for='{{trackId}}-mute')
-            input(type='checkbox' data-track='{{trackId}}' name='{{trackId}}-mute' id='{{trackId}}-mute' value='on').track-mute-toggle
-            |  Mute
-
-          input(type='range' data-track='{{trackId}}' name='{{trackId}}-vol' id='{{trackId}}-vol' min='-3' max='2' step='0.001' value='0').track-vol
-
-          button(type='button' name='{{trackId}}-effects-toggle' id='{{trackId}}-effects-toggle').track-effects-toggle Effects
-
-        fieldset.track-effects
-          label(for='{{trackId}}-reverb-toggle') Reverb
-          input(type='checkbox' data-track='1' name='{{trackId}}-reverb-toggle' id='{{trackId}}-reverb-toggle' value='on').track-reverb-toggle
-          input(type='range' data-track='1' name='{{trackId}}-reverb-level' id='{{trackId}}-reverb-level' min='0' max='1' step='0.001' value='0').track-reverb-level
-
-          hr
-
-          label(for='{{trackId}}-echo-toggle') Echo
-          input(type='checkbox' data-track='1' name='{{trackId}}-echo-toggle' id='{{trackId}}-echo-toggle' value='on').track-echo-toggle
-          input(type='range' data-track='1' name='{{trackId}}-echo-level' id='{{trackId}}-echo-level' min='0' max='1' step='0.001' value='0').track-echo-level
-
-        section(id='{{trackId}}-waveform').waveform
-          //- canvas
-          | Waveform goes here.
+  
+  include partials/_master_controls
+  include partials/_track_template
