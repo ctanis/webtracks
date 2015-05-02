@@ -7,8 +7,6 @@ html.no-js(lang="en")
   body
     #main.main
       block templates
-      #control-panel
-        include partials/_transport
-        include partials/_reverb_master_controls
-        include partials/_echo_master_controls
-    script(src="/javascript/main.js")
+      include partials/_controls
+    script(src='/bower_components/jquery/dist/jquery.min.js')
+    script(src='/javascript/main.js')
