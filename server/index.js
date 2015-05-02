@@ -1,7 +1,7 @@
 var express = require('express');
 
 var app = express();
-
+var trax={};
 
 app.use(express.static('public'));
 app.use('/javascript', express.static('javascript'));
@@ -23,9 +23,19 @@ io.on('connection', function(socket) {
 
     socket.emit('hi', client_no++);
 
+
+    for (var t in trax)
+    {
+        socket.emit('addTrack', trax[t]);
+    }
+
+
     socket.on('addTrack', function(msg) {
         console.log('adding track ' + msg.id + " -- " + msg.track.name + " -- " + msg.track.data.length);
+
         socket.broadcast.emit('addTrack', msg);
+
+        trax[msg.id]=msg;
     });
 
     // console.log('a user connected');

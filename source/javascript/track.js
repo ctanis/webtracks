@@ -9,10 +9,7 @@ var micinput;                   // mic input node
 var recorder;                   // mic recorder
 var micmonitor;                 
 
-var tracks=[];
-
 var master;                     // output gain node
-
 
 
 function track_init() {
@@ -110,8 +107,6 @@ function AudioTrack() {
 
     this.setBuffer = function(buffer) {
 
-        console.log("setting buffer with type " + typeof buffer + " len " + buffer.length);
-
         this.buffer = buffer;
         this.stream = new BufferStreamer(this.buffer, globalChunkSize, this.gainNode);
         this.sample_start=0;
@@ -191,56 +186,6 @@ function enableMic()  {
 }
 
 
-function Monitor(device, elt) {
-
-    this.analyser = audio.createAnalyser();
-    this.canvas=elt;
-    this.ctx2d = this.canvas.getContext("2d");
-    this.ctx2d.lineWidth=1;
-    
-    this.analyser.fftSize = 2048;
-
-    this.canvas.width=this.analyser.frequencyBinCount;
-    this.buffer = new Uint8Array(this.analyser.frequencyBinCount);
-    this.canvas.height=600;
-
-    device.connect(this.analyser);
-    this.analyser.connect(audio.destination);
-    this.keepDrawing=1;
-
-    this.draw = function() {
-
-        if (this.keepDrawing) {
-            requestAnimationFrame(this.draw.bind(this));
-        }
-        //        this.analyser.getByteFrequencyData(this.buffer);
-        this.analyser.getByteTimeDomainData(this.buffer);
-
-        this.clear();
-        var ctx = this.ctx2d;
-
-        ctx.beginPath();
-        ctx.moveTo(0, 600);
-
-        var min=999;
-        var max=-999;
-        for (var i=0; i<this.buffer.length; i++)
-        {
-            ctx.lineTo(i, 600 - (this.buffer[i]/255 * 600));
-        }
-        ctx.lineTo(this.buffer.length, 600);
-
-        ctx.strokeStyle = '#ddd';
-        ctx.fillStyle = '#f22';
-        ctx.fill();
-    };
-
-    this.clear = function() {
-        this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    };
-
-}
-
 
 function holdRecorded(buff) {
     
@@ -316,16 +261,25 @@ WebTrax.prototype.addTrack = function(track, track_id)
 
     // replace with UI callback?
     var canvas = document.createElement('canvas');
-    canvas.id="track"+tracks.length;
+    canvas.id="track"+this.trax.length;
     track.draw(canvas);
     document.body.appendChild(canvas);
 };
 
 
+WebTrax.prototype.removeTrack = function(track_id)
+{
+    delete this.trax[track_id];
+
+    this.socket.emit('removeTrack', track_id);
+}
+
+
+
 WebTrax.prototype.parseTrackBlob = function(blob) {
 
-    console.log("parsing");
-    console.log(blob);
+    // console.log("parsing");
+    // console.log(blob);
 
     var id = blob.id;
     var tdata = blob.track;
@@ -351,11 +305,13 @@ WebTrax.prototype.packBlob = function(track) {
         time_start: track.time_start,
         sample_start: track.sample_start,
         sample_end: track.sample_end,
+
+        // yes, this has to be buffer.buffer
         data: track.buffer.buffer
     };
 
-    console.log('packing');
-    console.log(blob);
+    // console.log('packing');
+    // console.log(blob);
     return blob;
     
 };
