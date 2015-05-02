@@ -28,11 +28,17 @@ gulp.task("default", ["build", "browser-sync"], function () {
 gulp.task("build", ["markup", "styles", "javascript", "images", "auxiliary"], function () {});
 
 // Generate markup:
-gulp.task("markup", function () {
+gulp.task("markup", ["raw-html"], function () {
   gulp.src(markupSrc)
   .pipe(jade({
     pretty: true
   }))
+  .pipe(gulp.dest("build/"));
+});
+
+// Serve raw HTML
+gulp.task("raw-html", function () {
+  gulp.src("source/markup/raw-html/*")
   .pipe(gulp.dest("build/"));
 });
 
