@@ -71,6 +71,19 @@ var ui = {
     var track = $(event.target).attr('data-track')
     wt.trax[track].setVolume(event.target.value)
   },
+  trackMute: function (event) {
+    var checkbox = $(event.target)
+    var track = checkbox.attr('data-track')
+    var volume = $('#' + track + '-vol')
+    console.log(volume)
+    if (!checkbox.attr('data-restore-volume')) {
+      checkbox.attr('data-restore-volume', volume.val())
+      volume.val('0').attr('disabled', 'disabled')
+    } else {
+      volume.val(checkbox.attr('data-restore-volume'))
+      checkbox.removeAttr('data-restore-volume')
+    }
+  },
   masterSetVolume: function (event) {
     wt.masterVolume(event.target.value)
   },

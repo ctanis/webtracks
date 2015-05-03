@@ -15,7 +15,7 @@ $('#echo-volume').on('input', ui.setEchoVolume)
 
 // TRACK-SPECIFIC CONTROLS
 $(document).on('click', '.track-effects-toggle', ui.toggleEffects)
-  .on('click', '.track-mute-toggle', fpo)
+  .on('click', '.track-mute-toggle', ui.trackMute)
   .on('input', '.track-vol', ui.trackSetVolume)
   .on('input', '.track-echo-level', ui.setTrackEchoVolume)
   .on('click', '.track-remove', ui.removeTrack)
