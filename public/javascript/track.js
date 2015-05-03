@@ -51,7 +51,8 @@ function BufferStreamer(buffer, chunksize, output)
     this.processor.connect(output.echoGain);
     this.processor.onaudioprocess = this.onprocess.bind(this);
 
-    this.play = function(t) {
+    this.play = function(t, len) {
+        this.max = len;
         this.pos = t;
         this.playing=true;
     };
@@ -86,6 +87,16 @@ BufferStreamer.prototype.onprocess = function(e) {
         }
 
         this.pos += this.chunksize;
+        if (typeof this.max === 'number')
+        {
+            var percentage = this.pos / this.max;
+            
+            if (percentage <= 1) {
+                // console.log('setting ui pos to ' + this.pos/this.max);
+                // update pos
+                ui.updateNeedle(this.pos / this.max);
+            }
+        }
     }
     else
     {
@@ -156,14 +167,20 @@ function AudioTrack(trackName) {
     };
 
 
-    this.play = function(sample) {
+    this.play = function(sample, poslength) {
 
         if (sample >= this.time_start &&
             sample < this.time_start + (this.sample_end-this.sample_start))
         {
             console.log("playing " + this.name + " from sample " + sample );
-            this.stream.play(sample-this.time_start);
-            
+
+            if (poslength) {
+                this.stream.play(sample-this.time_start, poslength);
+            }
+            else
+            {
+                this.stream.play(sample-this.time_start);
+            }
         }
     };
 
@@ -312,8 +329,19 @@ function WebTrax(ui) {
 }
 
 WebTrax.prototype.play = function() {
+    var go=true;                // first track updates pointer position
+
     for (var i in this.trax) {
-        this.trax[i].play(this.pos);
+
+        if (go)
+        {
+            this.trax[i].play(this.pos, this.longest);
+        }
+        else
+        {
+            this.trax[i].play(this.pos);
+        }
+        go=false;
     }    
 };
 
