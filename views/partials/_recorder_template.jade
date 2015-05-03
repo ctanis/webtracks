@@ -1,8 +1,12 @@
 #recorder-overlay.recorder-overlay
   #recorder.recorder
-    label(for='recording-name') Name your track:
-    input(name='recording-name' id='recording-name' type='text' value='' placeholder='Name your new track')
-    input(name='recorder-start' id='recorder-start' type='button' value='record new').recorder-start
-    input(name='recorder-stop' id='recorder-stop' type='button' value='stop recording').recorder-stop
-    input(name='recorder-save' id='recorder-save' type='button' value='save recording' onClick='recordSave()').recorder-save
-    input(name='recorder-cancel' id='recorder-cancel' type='button' value='cancel' onClick='recordCancel()').recorder-cancel
+    #recorder-step-1.recorder-step-1
+      input(name='recorder-start' id='recorder-start' type='button' value='Record').recorder-start
+      input(name='recorder-stop' id='recorder-stop' type='button' value='Stop').recorder-stop
+    #recorder-step-2.recorder-step-2
+      label(for='recording-name') Name your track:
+      input(name='recording-name' id='recording-name' type='text' value='' placeholder='Name your new track')
+      .waveform-preview
+        .waveform-wrapper
+      input(name='recorder-save' id='recorder-save' type='button' value='save recording').recorder-save
+      input(name='recorder-cancel' id='recorder-cancel' type='button' value='cancel').recorder-cancel

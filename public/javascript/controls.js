@@ -4,8 +4,10 @@ var fpo = function(e){console.log(e.target, e.target.value)} // For Position Onl
 $('#play').on('click', wt.play)
 $('#stop').on('click', wt.stop)
 $('#master-vol').on('input', fpo)
-$('#recorder-start').on('click', recordNew)
-$('#recorder-stop').on('click', recordStop)
+$('#recorder-start').on('click', ui.recordNew)
+$('#recorder-stop').on('click', ui.recordStop)
+$('#recorder-save').on('click', ui.recordSave)
+$('#recorder-cancel').on('click', ui.recordCancel)
 $('#record-toggle').on('click', ui.toggleRecorder)
 
 // TRACK-SPECIFIC CONTROLS

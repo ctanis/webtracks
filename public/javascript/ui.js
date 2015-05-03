@@ -3,13 +3,16 @@ var ui = {
   tracks: $('#tracks'),
   recorder: $('#recorder'),
   recorderOverlay: $('#recorder-overlay'),
+  recorderStart: $('#recorder-start'),
+  recorderStop: $('#recorder-stop'),
+  recorderStep1: $('#recorder-step-1'),
+  recorderStep2: $('#recorder-step-2'),
 
   // METHODS:
   loadNewTrack: function (track) {
     var newTrackTemplate = Handlebars.compile($("#track-template").html())
     var newTrack = $(newTrackTemplate(track))
     newTrack.find('.waveform-wrapper').append(track.canvas)
-    ui.toggleRecorder()
     ui.tracks.append(newTrack)
   },
   toggleEffects: function () {
@@ -19,6 +22,38 @@ var ui = {
   toggleRecorder: function () {
     ui.recorderOverlay.fadeToggle(200)
   },
+  recordNew: function () {
+    ui.recorderStart.hide()
+    ui.recorderStop.show()
+    recordNew()
+  },
+  recordStop: function () {
+    // do something, then:
+    recordStop(function () {
+      ui.recorderStep1.hide()
+      ui.recorderStep2.show()
+    })
+  },
+  recordSave: function () {
+    commitRecorded(function (track) {
+      ui.loadNewTrack(track)
+      ui.resetRecorder()
+    })
+  },
+  recordCancel: function () {
+    lastRecording = null
+    resetRecorder()
+  },
+  resetRecorder: function () {
+    ui.toggleRecorder()
+    setTimeout(function () {
+      ui.recorderStop.hide()
+      ui.recorderStart.show()
+      ui.recorderStep2.hide()
+      ui.recorderStep1.show()
+    }, 250)
+  },
+
   init: function () {
     // this.loadNewTrack(this.dummyTrack)
   },

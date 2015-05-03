@@ -15,6 +15,8 @@ var master;                     // output gain node
 var masterGain;
 var masterEcho;
 
+var lastRecording;
+
 function track_init(callback) {
     audio = new (window.AudioContext || window.webkitAudioContext)();
     wt = new WebTrax();
@@ -240,7 +242,13 @@ function holdRecorded(callback, buff) {
     // console.log(buff);
     track.setBuffer(buff[0]);
     recorder.clear();
+    lastRecording = track;
     callback()
+}
+
+function commitRecorded(callback) {
+    wt.addTrack(callback, lastRecording);
+    lastRecording = null;
 }
 
 function recordNew() {

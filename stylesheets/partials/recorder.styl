@@ -1,5 +1,6 @@
 .recorder
   display block
+  overflow hidden
   position fixed
   top 4em
   left 50%
@@ -13,9 +14,35 @@
   &.focused
     top 4em
 
-// .recorder-start, .recorder-stop, .recorder-save, .recorder-cancel
-//   display none
+.recorder-start, .recorder-stop, .recorder-save, .recorder-cancel
+  outline none
 
 .recorder-overlay
   @extend .overlay
+  display none
+
+.recorder-start
+  display block
+  width 16rem
+  height 16rem
+  margin 2rem
+  border none
+  border-radius 8em
+  font-size 2em
+  font-weight bold
+  background-color #b00
+  color $light-gray
+  box-shadow 0 0 4px #b00
+
+.recorder-stop
+  @extend .recorder-start
+  display none
+  background-color #d00
+  box-shadow 0 0 2em #d00
+
+.recorder-step-1
+  hostile-takeover()
+
+.recorder-step-2
+  hostile-takeover()
   display none
