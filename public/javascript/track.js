@@ -5,14 +5,14 @@ var wt;
 var audio;                      // main audio
 
 var globalChunkSize=256;        //power of 2 >= 256
-var waveFormScale=1000;
+var waveFormScale=500;
 
 var micinput;                   // mic input node
 var recorder;                   // mic recorder
 var micmonitor;                 
 
 var master;                     // output gain node
-var masterReverb;
+var masterGain;
 var masterEcho;
 
 function track_init() {
@@ -20,9 +20,10 @@ function track_init() {
     wt = new WebTrax();
 
     master = audio.createGain();
-    master = audio.createDelay(1);
-    
-    master.connect(audio.destination);
+    masterGain = audio.createGain();
+    masterEcho = new AudioEcho(masterGain);
+    master.connect(masterGain);
+    masterGain.connect(audio.destination);
 
     enableMic();
 
@@ -46,7 +47,8 @@ function BufferStreamer(buffer, chunksize, output)
     this.pos = 0;
     this.output = output;
     this.processor = audio.createScriptProcessor(this.chunksize, 1, 1);
-    this.processor.connect(output);
+    this.processor.connect(output.gainNode);
+    this.processor.connect(output.echoGain);
     this.processor.onaudioprocess = this.onprocess.bind(this);
 
     this.play = function(t) {
@@ -108,9 +110,15 @@ function AudioTrack(trackName) {
     this.sample_start   = 0;
     this.sample_end     = 0;
     this.gain           = 1;
+    this.echo           = 0;
 
     this.gainNode = audio.createGain();
     this.gainNode.connect(master);
+
+    this.echoGain = audio.createGain();
+    this.echoGain.connect(masterEcho.in);
+    this.echoGain.gain.value=this.echo;
+
 
     this.setVolume = function(g) {
         this.gain =g;
@@ -122,10 +130,22 @@ function AudioTrack(trackName) {
     };
 
 
+    this.setSend = function(g) {
+        this.echo =g;
+        this.echoGain.gain.value=this.echo;
+    };
+
+    this.getSend = function() {
+        return this.echoGain.gain.value;
+    };
+
+
+
+
     this.setBuffer = function(buffer) {
 
         this.buffer = buffer;
-        this.stream = new BufferStreamer(this.buffer, globalChunkSize, this.gainNode);
+        this.stream = new BufferStreamer(this.buffer, globalChunkSize, this);
         this.sample_start=0;
         this.sample_end=this.buffer.length;
     };
@@ -224,6 +244,8 @@ function holdRecorded(buff) {
 }
 
 function recordNew() {
+    wt.stop();
+    wt.play();
     recorder.record();
 }
 
@@ -351,13 +373,14 @@ WebTrax.prototype.parseTrackBlob = function(blob, header) {
     track.time_start = tdata.time_start;
     track.sample_start = tdata.sample_start;
     track.sample_end = tdata.sample_end;
+    track.setVolume(tdata.gain);
 
     if (!header)
     {
         var buffer = new Float32Array(tdata.data);
         track.setBuffer(buffer);
     }
-    // track.gainNode.set(tdata.gain)
+
 
     return track;
 };
@@ -368,6 +391,7 @@ WebTrax.prototype.packTrackBlob = function(track, header) {
         time_start: track.time_start,
         sample_start: track.sample_start,
         sample_end: track.sample_end,
+        gain: track.gain
     };
 
     if (!header)
@@ -381,4 +405,41 @@ WebTrax.prototype.packTrackBlob = function(track, header) {
     return blob;
     
 };
+
+
+
+function AudioEcho(out) {
+    this.feedBack=0;
+    this.time=1000;
+    this.gain=0;
+
+    this.in = audio.createDelay(1);
+    this.fbgain = audio.createGain();
+    this.echoGain = audio.createGain();
+
+    this.in.connect(this.fbgain);
+    this.fbgain.connect(this.in);
+    this.in.connect(this.echoGain);
+    this.echoGain.connect(out);
+
+    this.setDelay = function(d) {
+        this.time = d;
+        this.in.delayTime.value=d;
+    };
+
+    this.setFeedback = function(f) {
+        this.feedBack = f;
+        this.fbgain.gain.value=f;
+    };
+
+    this.setVolume = function(v) {
+        this.gain=v;
+        this.echoGain.gain.value=v;
+    }
+
+    
+    this.setDelay(1);
+    this.setFeedback(0);
+    this.setVolume(0);
+}
 
