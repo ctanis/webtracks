@@ -2,6 +2,7 @@ var ui = {
   // LOCALS:
   tracks: $('#tracks'),
   recorder: $('#recorder'),
+  recorderOverlay: $('#recorder-overlay'),
 
   // METHODS:
   loadNewTrack: function (track) {
@@ -16,8 +17,7 @@ var ui = {
     effectControls.toggleClass('open')
   },
   toggleRecorder: function () {
-    console.log(this.recorder)
-    ui.recorder.toggleClass('focused')
+    ui.recorderOverlay.fadeToggle(200)
   },
   init: function () {
     // this.loadNewTrack(this.dummyTrack)
