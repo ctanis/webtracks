@@ -169,18 +169,17 @@ function AudioTrack(trackName) {
 
     this.play = function(sample, poslength) {
 
-        if (sample >= this.time_start &&
-            sample < this.time_start + (this.sample_end-this.sample_start))
-        {
-            console.log("playing " + this.name + " from sample " + sample );
+        // put this back if we ever add clip translation and cropping
+        // if (sample >= this.time_start &&
+        //     sample < this.time_start + (this.sample_end-this.sample_start))
+        console.log("playing " + this.name + " from sample " + sample );
 
-            if (poslength) {
-                this.stream.play(sample-this.time_start, poslength);
-            }
-            else
-            {
-                this.stream.play(sample-this.time_start);
-            }
+        if (poslength) {
+            this.stream.play(sample-this.time_start, poslength);
+        }
+        else
+        {
+            this.stream.play(sample-this.time_start);
         }
     };
 
@@ -328,18 +327,28 @@ function WebTrax(ui) {
 
 }
 
-WebTrax.prototype.play = function() {
+WebTrax.prototype.play = function(pct) {
     var go=true;                // first track updates pointer position
+    var start = 0;
+
+    if (typeof pct === 'number')
+    {
+        start = pct * this.longest;
+    }
+    else
+    {
+        start = 0;
+    }
 
     for (var i in this.trax) {
 
         if (go)
         {
-            this.trax[i].play(this.pos, this.longest);
+            this.trax[i].play(start, this.longest);
         }
         else
         {
-            this.trax[i].play(this.pos);
+            this.trax[i].play(start);
         }
         go=false;
     }    
