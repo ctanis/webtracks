@@ -14,6 +14,7 @@ var micmonitor;
 var master;                     // output gain node
 var masterGain;
 var masterEcho;
+var monitor;
 
 var lastRecording;
 
@@ -26,6 +27,9 @@ function track_init(ui) {
     masterEcho = new AudioEcho(masterGain);
     master.connect(masterGain);
     masterGain.connect(audio.destination);
+
+    monitor = new Monitor(masterGain, document.getElementById('spectrograph'));
+    monitor.draw();
 
     enableMic();
 
@@ -517,3 +521,63 @@ function AudioEcho(out) {
     this.setVolume(0);
 }
 
+
+
+
+function Monitor(device, elt) {
+
+    this.analyser = audio.createAnalyser();
+    this.canvas=elt;
+    this.ctx2d = this.canvas.getContext("2d");
+    this.ctx2d.lineWidth=50;
+    
+    this.analyser.fftSize = 2048;
+
+    // this.canvas.width=100;
+    // this.buffer = new Uint8Array(100);
+    console.log(this.analyser.frequencyBinCount);
+
+    this.canvas.width=this.analyser.frequencyBinCount;
+    this.buffer = new Uint8Array(this.analyser.frequencyBinCount);
+
+
+    this.canvas.height=600;
+
+    device.connect(this.analyser);
+    this.analyser.connect(audio.destination);
+    this.keepDrawing=1;
+
+    this.draw = function() {
+
+        if (this.keepDrawing) {
+            requestAnimationFrame(this.draw.bind(this));
+        }
+        //        this.analyser.getByteFrequencyData(this.buffer);
+        this.analyser.getByteTimeDomainData(this.buffer);
+
+        this.clear();
+        var ctx = this.ctx2d;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 600);
+
+        var min=999;
+        var max=-999;
+        for (var i=0; i<this.buffer.length; i++)
+        {
+            ctx.lineTo(i, 600 - (this.buffer[i]/255 * 600));
+        }
+        ctx.lineTo(this.buffer.length, 600);
+
+        // ctx.strokeStyle = '#ddd';
+        ctx.strokeStyle = '#0F0';
+        ctx.fillStyle = '#f22';
+        // ctx.stroke();
+        ctx.fill();
+    };
+
+    this.clear = function() {
+        this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    };
+
+}
