@@ -79,8 +79,13 @@ var ui = {
     if (!checkbox.attr('data-restore-volume')) {
       checkbox.attr('data-restore-volume', volume.val())
       volume.val('0').attr('disabled', 'disabled')
+      event.target.value = 0
+      ui.trackSetVolume(event)
     } else {
       volume.val(checkbox.attr('data-restore-volume'))
+      volume.removeAttr('disabled')
+      event.target.value = volume.val()
+      ui.trackSetVolume(event)
       checkbox.removeAttr('data-restore-volume')
     }
   },
