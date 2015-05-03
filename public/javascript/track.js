@@ -96,7 +96,7 @@ BufferStreamer.prototype.onprocess = function(e) {
 
 function AudioTrack(trackName) {
 
-    this.name           = trackName || 'New Track by [user_name]'; //channel name
+    this.name           = trackName || null; //channel name
     this.buffer         = null;
     this.stream         = null;
     this.time_start     = 0;
@@ -288,6 +288,7 @@ WebTrax.prototype.addTrack = function(track, track_id)
     canvas.className='trackwf';
     track.draw(canvas);
     // document.body.appendChild(canvas);
+    if (!track.name) { track.name = 'Track ' + track_id }
     ui.loadNewTrack(track);
 };
 
