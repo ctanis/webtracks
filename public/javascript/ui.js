@@ -22,6 +22,13 @@ var ui = {
     newTrack.find('.waveform-wrapper').append(track.canvas)
     ui.tracks.append(newTrack)
   },
+  removeTrack: function (event) {
+    var track = $(event.target).attr('data-track')
+    wt.removeTrack(track)
+  },
+  removeTrackFromUI: function (track) {
+    $('#' + track).remove()
+  },
   toggleEffects: function () {
     var effectControls = $(this).parents('.track').find('.track-effects')
     effectControls.toggleClass('open')
@@ -41,8 +48,7 @@ var ui = {
     })
   },
   recordSave: function () {
-    commitRecorded(ui.recordingName.val(), function (track) {
-      ui.loadNewTrack(track)
+    commitRecorded(ui.recordingName.val(), function () {
       ui.resetRecorder()
     })
   },
@@ -52,6 +58,7 @@ var ui = {
   },
   resetRecorder: function () {
     ui.toggleRecorder()
+    lastRecording = null
     setTimeout(function () {
       ui.recordingName.val('')
       ui.recorderStop.hide()
@@ -60,9 +67,29 @@ var ui = {
       ui.recorderStep1.show()
     }, 250)
   },
+  trackSetVolume: function (event) {
+    var track = $(event.target).attr('data-track')
+    wt.trax[track].setVolume(event.target.value)
+  },
+  masterSetVolume: function (event) {
+    wt.masterVolume(event.target.value)
+  },
+  setEchoTime: function (event) {
+    masterEcho.setDelay(event.target.value)
+  },
+  setEchoFeedback: function (event) {
+    masterEcho.setFeedback(event.target.value)
+  },
+  setEchoVolume: function (event) {
+    masterEcho.setVolume(event.target.value)
+  },
+  setTrackEchoVolume: function (event) {
+    var track = $(event.target).attr('data-track')
+    wt.trax[track].setSend(event.target.value)
+  },
 
-  init: function () {
-    // this.loadNewTrack(this.dummyTrack)
+  init: function (track) {
+    ui.loadNewTrack(track);
   },
 
   // FOR TESTING PURPOSES ONLY:

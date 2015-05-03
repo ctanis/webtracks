@@ -7,21 +7,14 @@ script#track-template(type='text/template')
         input(type='checkbox' data-track='{{id}}' name='{{id}}-mute' id='{{id}}-mute' value='on').track-mute-toggle
         |  Mute
 
-      input(type='range' data-track='{{id}}' name='{{id}}-vol' id='{{id}}-vol' min='-3' max='2' step='0.001' value='0').track-vol
+      input(type='range' data-track='{{id}}' name='{{id}}-vol' id='{{id}}-vol' min='0' max='3' step='0.01' value='1').track-vol
 
       button(type='button' name='{{id}}-effects-toggle' id='{{id}}-effects-toggle').track-effects-toggle Effects
 
     fieldset.track-effects
-      label(for='{{id}}-reverb-toggle') Reverb
-      input(type='checkbox' data-track='1' name='{{id}}-reverb-toggle' id='{{id}}-reverb-toggle' value='on').track-reverb-toggle
-      input(type='range' data-track='1' name='{{id}}-reverb-level' id='{{id}}-reverb-level' min='0' max='1' step='0.001' value='0').track-reverb-level
-
-      hr
-
       label(for='{{id}}-echo-toggle') Echo
-      input(type='checkbox' data-track='1' name='{{id}}-echo-toggle' id='{{id}}-echo-toggle' value='on').track-echo-toggle
-      input(type='range' data-track='1' name='{{id}}-echo-level' id='{{id}}-echo-level' min='0' max='1' step='0.001' value='0').track-echo-level
+      input(type='range' data-track='{{id}}' name='{{id}}-echo-level' id='{{id}}-echo-level' min='0' max='1' step='0.001' value='0').track-echo-level
 
     section(id='{{id}}-waveform').track-waveform
       .waveform-wrapper
-      button(type='button' name='{{id}}-remove' id='{{id}}-remove').track-remove &times;
+      button(type='button' data-track='{{id}}' name='{{id}}-remove' id='{{id}}-remove').track-remove &times;

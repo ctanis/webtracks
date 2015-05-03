@@ -17,9 +17,9 @@ var masterEcho;
 
 var lastRecording;
 
-function track_init(callback) {
+function track_init(ui) {
     audio = new (window.AudioContext || window.webkitAudioContext)();
-    wt = new WebTrax();
+    wt = new WebTrax(ui);
 
     master = audio.createGain();
     masterGain = audio.createGain();
@@ -35,10 +35,6 @@ function track_init(callback) {
     {
         console.log('no websocket');
         socket = null;
-    }
-
-    if (typeof callback == 'function') {
-        callback();
     }
 }
 
@@ -237,14 +233,10 @@ function enableMic()  {
 
 
 
-function commitRecorded(recordingName, callback) {
+function commitRecorded(recordingName) {
     lastRecording.name = recordingName;
-    wt.addTrack(lastRecording, function (track) {
-        lastRecording = null;
-        if (typeof callback == 'function') {
-            callback(track);
-        }
-    });
+    wt.addTrack(lastRecording);
+    wt.ui.resetRecorder();
 }
 
 function recordNew() {
@@ -270,11 +262,12 @@ function recordStop(callback) {
 
 
 
-function WebTrax() {
+function WebTrax(ui) {
     this.trax = {};
     this.socket = io();
     this.trackno=0;
     this.pos=0;
+    this.ui = ui;
 
     this.socket.on('hi', function(msg) {
         this.client_id = msg;
@@ -318,13 +311,17 @@ WebTrax.prototype.stop = function() {
     }    
 };
 
+WebTrax.prototype.masterVolume = function(v) {
+    masterGain.gain.value = v;
+}
 
 
-WebTrax.prototype.addTrack = function(track, track_id, callback)
+
+WebTrax.prototype.addTrack = function(track, track_id)
 {
-    if (typeof track_id === 'function')
+
+    if (!track_id)
     {
-        callback = track_id;
         track_id = this.client_id + '-' + this.trackno;
         this.trackno++;
 
@@ -332,7 +329,8 @@ WebTrax.prototype.addTrack = function(track, track_id, callback)
         this.socket.emit('addTrack', { id: track_id,
                                        track: this.packTrackBlob(track, false) });
     }
-    
+
+    track.id = track_id    
     console.log("new track with id "  + track_id);
     this.trax[track_id]=track;
 
@@ -343,8 +341,8 @@ WebTrax.prototype.addTrack = function(track, track_id, callback)
     track.draw(canvas);
     // document.body.appendChild(canvas);
     if (!track.name) { track.name = 'Track ' + track_id }
-    if (typeof callback == 'function') {
-        callback(track);
+    if (typeof this.ui.loadNewTrack == 'function') {
+        this.ui.loadNewTrack(track);
     }
 };
 
@@ -352,17 +350,14 @@ WebTrax.prototype.addTrack = function(track, track_id, callback)
 
 WebTrax.prototype.removeTrack = function(track_id, remote)
 {
-    // remove waveform canvas -- fix to work with UI
-
-    var canvasid = 'wf'+track_id;
-    document.body.removeChild(document.getElementById(canvasid));
-
     delete this.trax[track_id];
 
     if (! remote)
     {
         this.socket.emit('removeTrack', track_id);
     }
+
+    this.ui.removeTrackFromUI(track_id);
 }
 
 WebTrax.prototype.updateTrack = function(track_id)

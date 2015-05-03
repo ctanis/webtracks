@@ -1,6 +1,8 @@
 section#echo-master-controls.effects-master-controls
   h3 Echo
   label(for='echo-type') Time
-  input(type='number' name='echo-time' id='echo-time' min='5' max='1000' step='1' value='5')
-  label(for='echo-level') Level
-  input(type='range' name='echo-level' id='echo-level' min='0' max='0.9' step='0.01' value='0.15')
+  input(type='range' name='echo-time' id='echo-time' min='0.01' max='1' step='0.001' value='0.2')
+  label(for='echo-level') Feedback
+  input(type='range' name='echo-feedback' id='echo-feedback' min='0' max='1' step='0.001' value='0.1')
+  label(for='echo-level') Volume
+  input(type='range' name='echo-volume' id='echo-volume' min='0' max='3' step='0.01' value='0')

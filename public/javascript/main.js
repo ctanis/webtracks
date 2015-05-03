@@ -1,1 +1,1 @@
-window.onload = track_init(ui.init)
+window.onload = track_init(ui)
