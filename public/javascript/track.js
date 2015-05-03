@@ -3,7 +3,9 @@
 var wt;
 
 var audio;                      // main audio
+
 var globalChunkSize=256;        //power of 2 >= 256
+var waveFormScale=1000;
 
 var micinput;                   // mic input node
 var recorder;                   // mic recorder
@@ -141,8 +143,8 @@ function AudioTrack(trackName) {
 
         canvas.height=200;      //fix me
 
-        var delta=1000;
-        canvas.width=this.buffer.length / 1000;
+        var delta=waveFormScale;
+        canvas.width=this.buffer.length / delta;
 
         var ctx = canvas.getContext("2d");
 
@@ -157,7 +159,7 @@ function AudioTrack(trackName) {
             ctx.lineTo(i,(sample+1)*100);
         }
 
-        ctx.lineTo(600, 100);
+        ctx.lineTo(canvas.width, 100);
 
         // waveform colors
         ctx.strokeStyle = '#ddd';
