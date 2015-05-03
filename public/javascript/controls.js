@@ -6,6 +6,7 @@ $('#stop').on('click', wt.stop)
 $('#master-vol').on('input', fpo)
 $('#recorder-start').on('click', recordNew)
 $('#recorder-stop').on('click', recordStop)
+$('#record-toggle').on('click', ui.toggleRecorder)
 
 // TRACK-SPECIFIC CONTROLS
 $(document).on('click', '.track-effects-toggle', ui.toggleEffects)

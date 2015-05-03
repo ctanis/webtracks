@@ -1,6 +1,7 @@
 #recorder.recorder
-  input(id='recorder-start' type='button' value='record new')
-  input(id='recorder-stop' type='button' value='stop recording')
-  input(id='recording-name' type='text' value='' placeholder='Name your new track')
-  input(id='recorder-save' type='button' value='save recording' onClick='recordSave()')
-  input(id='recorder-cancel' type='button' value='cancel' onClick='recordCancel()')
+  label(for='recording-name') Name your track:
+  input(name='recording-name' id='recording-name' type='text' value='' placeholder='Name your new track')
+  input(name='recorder-start' id='recorder-start' type='button' value='record new').recorder-start
+  input(name='recorder-stop' id='recorder-stop' type='button' value='stop recording').recorder-stop
+  input(name='recorder-save' id='recorder-save' type='button' value='save recording' onClick='recordSave()').recorder-save
+  input(name='recorder-cancel' id='recorder-cancel' type='button' value='cancel' onClick='recordCancel()').recorder-cancel

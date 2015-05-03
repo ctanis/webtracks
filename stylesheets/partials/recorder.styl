@@ -1,2 +1,17 @@
 .recorder
   display block
+  position fixed
+  top -25em
+  left 50%
+  z-index 10000
+  width 20em
+  height 20em
+  margin-left -10em
+  border-radius 10em
+  background-color $dark-gray
+  transition top 0.2s ease-out
+  &.focused
+    top 4em
+
+// .recorder-start, .recorder-stop, .recorder-save, .recorder-cancel
+//   display none
