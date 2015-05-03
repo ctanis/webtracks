@@ -235,20 +235,12 @@ function enableMic()  {
 
 
 
-function holdRecorded(callback, buff) {
-
-    var track = new AudioTrack($('#recording-name').val());
-    // console.log(typeof buff);
-    // console.log(buff);
-    track.setBuffer(buff[0]);
-    recorder.clear();
-    lastRecording = track;
-    callback()
-}
-
-function commitRecorded(callback) {
-    wt.addTrack(callback, lastRecording);
-    lastRecording = null;
+function commitRecorded(recordingName, callback) {
+    lastRecording.name = recordingName;
+    wt.addTrack(lastRecording, function (track) {
+        lastRecording = null;
+        callback(track)
+    });
 }
 
 function recordNew() {
@@ -259,7 +251,15 @@ function recordNew() {
 
 function recordStop(callback) {
     recorder.stop();
-    recorder.getBuffer(holdRecorded.bind(null, callback));
+    recorder.getBuffer(function (buff) {
+        var track = new AudioTrack();
+        // console.log(typeof buff);
+        // console.log(buff);
+        track.setBuffer(buff[0]);
+        recorder.clear();
+        lastRecording = track;
+        callback()
+    });
 }
 
 
@@ -314,10 +314,11 @@ WebTrax.prototype.stop = function() {
 
 
 
-WebTrax.prototype.addTrack = function(callback, track, track_id)
+WebTrax.prototype.addTrack = function(track, track_id, callback)
 {
-    if (!track_id)
+    if (typeof track_id === 'function')
     {
+        callback = track_id;
         track_id = this.client_id + '-' + this.trackno;
         this.trackno++;
 

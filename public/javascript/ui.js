@@ -7,6 +7,7 @@ var ui = {
   recorderStop: $('#recorder-stop'),
   recorderStep1: $('#recorder-step-1'),
   recorderStep2: $('#recorder-step-2'),
+  recordingName: $('#recording-name'),
 
   // METHODS:
   loadNewTrack: function (track) {
@@ -28,25 +29,25 @@ var ui = {
     recordNew()
   },
   recordStop: function () {
-    // do something, then:
     recordStop(function () {
       ui.recorderStep1.hide()
       ui.recorderStep2.show()
     })
   },
   recordSave: function () {
-    commitRecorded(function (track) {
+    commitRecorded(ui.recordingName.val(), function (track) {
       ui.loadNewTrack(track)
       ui.resetRecorder()
     })
   },
   recordCancel: function () {
     lastRecording = null
-    resetRecorder()
+    ui.resetRecorder()
   },
   resetRecorder: function () {
     ui.toggleRecorder()
     setTimeout(function () {
+      ui.recordingName.val('')
       ui.recorderStop.hide()
       ui.recorderStart.show()
       ui.recorderStep2.hide()
