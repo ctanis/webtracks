@@ -105,6 +105,18 @@ var ui = {
     var track = $(event.target).attr('data-track')
     wt.trax[track].setSend(event.target.value)
   },
+  updateNeedle: function (position) {
+    $('#needle').attr('style', 'left: ' + (position * 100) + '%')
+  },
+  playFromPosition: function (event) {
+    var target = $(event.target)
+    var stageWidth = target.parent().width()
+    var pagePos = event.pageX
+    var relativePos = pagePos - 288 // offset track controls
+    var position = relativePos / stageWidth
+    console.log(stageWidth)
+    wt.play(position)
+  },
 
   init: function (track) {
     ui.loadNewTrack(track);

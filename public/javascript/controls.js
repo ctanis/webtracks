@@ -19,4 +19,4 @@ $(document).on('click', '.track-effects-toggle', ui.toggleEffects)
   .on('input', '.track-vol', ui.trackSetVolume)
   .on('input', '.track-echo-level', ui.setTrackEchoVolume)
   .on('click', '.track-remove', ui.removeTrack)
-  .on('click', '.track-waveform', fpo) // catch value for x-axis; reposition
+  .on('click', '.track-waveform', ui.playFromPosition) // catch value for x-axis; reposition
