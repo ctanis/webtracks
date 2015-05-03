@@ -94,9 +94,9 @@ BufferStreamer.prototype.onprocess = function(e) {
 
 
 
-function AudioTrack() {
+function AudioTrack(trackName) {
 
-    this.name           = "New"; //channel name
+    this.name           = trackName || 'New Track by [user_name]'; //channel name
     this.buffer         = null;
     this.stream         = null;
     this.time_start     = 0;
@@ -194,8 +194,8 @@ function enableMic()  {
 
 
 function holdRecorded(buff) {
-    
-    var track = new AudioTrack();
+
+    var track = new AudioTrack($('#recording-name').val());
     // console.log(typeof buff);
     // console.log(buff);
     track.setBuffer(buff[0]);
