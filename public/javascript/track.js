@@ -15,7 +15,7 @@ var master;                     // output gain node
 var masterGain;
 var masterEcho;
 
-function track_init() {
+function track_init(callback) {
     audio = new (window.AudioContext || window.webkitAudioContext)();
     wt = new WebTrax();
 
@@ -35,7 +35,7 @@ function track_init() {
         socket = null;
     }
 
-    ui.init();
+    callback();
 }
 
 
@@ -233,14 +233,14 @@ function enableMic()  {
 
 
 
-function holdRecorded(buff) {
+function holdRecorded(callback, buff) {
 
     var track = new AudioTrack($('#recording-name').val());
     // console.log(typeof buff);
     // console.log(buff);
     track.setBuffer(buff[0]);
     recorder.clear();
-    wt.addTrack(track);
+    callback()
 }
 
 function recordNew() {
@@ -249,9 +249,9 @@ function recordNew() {
     recorder.record();
 }
 
-function recordStop() {
+function recordStop(callback) {
     recorder.stop();
-    recorder.getBuffer(holdRecorded);
+    recorder.getBuffer(holdRecorded.bind(null, callback));
 }
 
 
@@ -306,7 +306,7 @@ WebTrax.prototype.stop = function() {
 
 
 
-WebTrax.prototype.addTrack = function(track, track_id)
+WebTrax.prototype.addTrack = function(callback, track, track_id)
 {
     if (!track_id)
     {
@@ -328,7 +328,7 @@ WebTrax.prototype.addTrack = function(track, track_id)
     track.draw(canvas);
     // document.body.appendChild(canvas);
     if (!track.name) { track.name = 'Track ' + track_id }
-    ui.loadNewTrack(track);
+    callback(track);
 };
 
 
