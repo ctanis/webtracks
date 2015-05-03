@@ -282,7 +282,8 @@ WebTrax.prototype.addTrack = function(track, track_id)
     var canvas = document.createElement('canvas');
     canvas.id='wf'+track_id;
     track.draw(canvas);
-    document.body.appendChild(canvas);
+    // document.body.appendChild(canvas);
+    ui.loadNewTrack(track);
 };
 
 

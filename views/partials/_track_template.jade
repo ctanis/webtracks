@@ -23,6 +23,5 @@ script#track-template(type='text/template')
       input(type='range' data-track='1' name='{{id}}-echo-level' id='{{id}}-echo-level' min='0' max='1' step='0.001' value='0').track-echo-level
 
     section(id='{{id}}-waveform').track-waveform
-      //- canvas
-      | Waveform goes here.
+      .waveform-wrapper
       button(type='button' name='{{id}}-remove' id='{{id}}-remove').track-remove &times;
