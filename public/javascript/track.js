@@ -37,7 +37,9 @@ function track_init(callback) {
         socket = null;
     }
 
-    callback();
+    if (typeof callback == 'function') {
+        callback();
+    }
 }
 
 
@@ -239,7 +241,9 @@ function commitRecorded(recordingName, callback) {
     lastRecording.name = recordingName;
     wt.addTrack(lastRecording, function (track) {
         lastRecording = null;
-        callback(track)
+        if (typeof callback == 'function') {
+            callback(track);
+        }
     });
 }
 
@@ -258,7 +262,9 @@ function recordStop(callback) {
         track.setBuffer(buff[0]);
         recorder.clear();
         lastRecording = track;
-        callback()
+        if (typeof callback == 'function') {
+            callback();
+        }
     });
 }
 
@@ -337,7 +343,9 @@ WebTrax.prototype.addTrack = function(track, track_id, callback)
     track.draw(canvas);
     // document.body.appendChild(canvas);
     if (!track.name) { track.name = 'Track ' + track_id }
-    callback(track);
+    if (typeof callback == 'function') {
+        callback(track);
+    }
 };
 
 
