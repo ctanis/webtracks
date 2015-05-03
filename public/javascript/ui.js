@@ -10,6 +10,12 @@ var ui = {
   recordingName: $('#recording-name'),
 
   // METHODS:
+  play: function () {
+    wt.play()
+  },
+  stop: function () {
+    wt.stop()
+  },
   loadNewTrack: function (track) {
     var newTrackTemplate = Handlebars.compile($("#track-template").html())
     var newTrack = $(newTrackTemplate(track))

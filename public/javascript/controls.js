@@ -1,8 +1,8 @@
 var fpo = function(e){console.log(e.target, e.target.value)} // For Position Only (i.e. does nuthin’)
 
 // MASTER CONTROLS
-$('#play').on('click', wt.play)
-$('#stop').on('click', wt.stop)
+$('#play').on('click', ui.play)
+$('#stop').on('click', ui.stop)
 $('#master-vol').on('input', fpo)
 $('#recorder-start').on('click', ui.recordNew)
 $('#recorder-stop').on('click', ui.recordStop)
