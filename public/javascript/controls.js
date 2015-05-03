@@ -1,9 +1,11 @@
 var fpo = function(e){console.log(e.target, e.target.value)} // For Position Only (i.e. does nuthin’)
 
 // MASTER CONTROLS
-$('#play').on('click', play)
-$('#stop').on('click', stop)
+$('#play').on('click', wt.play)
+$('#stop').on('click', wt.stop)
 $('#master-vol').on('input', fpo)
+$('#recorder-start').on('click', recordNew)
+$('#recorder-stop').on('click', recordStop)
 
 // TRACK-SPECIFIC CONTROLS
 $(document).on('click', '.track-effects-toggle', ui.toggleEffects)
