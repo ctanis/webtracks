@@ -115,8 +115,9 @@ function AudioTrack() {
     };
 
     this.length = function() {
-        return sample_end - sample_start;
+        return this.sample_end - this.sample_start;
     };
+    
 
 
     this.play = function(sample) {
@@ -137,9 +138,11 @@ function AudioTrack() {
 
     this.draw = function(canvas) {
         this.canvas = canvas;
+
         canvas.height=200;      //fix me
-        canvas.width=600;
-        var delta = this.buffer.length / 600;
+
+        var delta=1000;
+        canvas.width=this.buffer.length / 1000;
 
         var ctx = canvas.getContext("2d");
 
@@ -148,7 +151,7 @@ function AudioTrack() {
 
         var c=0;
 
-        for (var i=0; i<600; i++)
+        for (var i=0; i<canvas.width; i++)
         {
             var sample = this.buffer[parseInt(i*delta)];
             ctx.lineTo(i,(sample+1)*100);
@@ -156,6 +159,7 @@ function AudioTrack() {
 
         ctx.lineTo(600, 100);
 
+        // waveform colors
         ctx.strokeStyle = '#ddd';
         ctx.fillStyle = '#f22';
         ctx.fill();
@@ -281,6 +285,7 @@ WebTrax.prototype.addTrack = function(track, track_id)
     // replace with UI callback?
     var canvas = document.createElement('canvas');
     canvas.id='wf'+track_id;
+    canvas.className='trackwf';
     track.draw(canvas);
     document.body.appendChild(canvas);
 };
