@@ -172,13 +172,14 @@ function AudioTrack(trackName) {
     };
 
 
-    this.draw = function(canvas) {
+    this.draw = function(canvas, length) {
         this.canvas = canvas;
 
         canvas.height=144;      //fix me
+        canvas.width=1000;
 
-        var delta=waveFormScale;
-        canvas.width=this.buffer.length / delta;
+        var delta=length/canvas.width;
+        var actual = this.buffer.length;
 
         var ctx = canvas.getContext("2d");
 
@@ -189,9 +190,20 @@ function AudioTrack(trackName) {
 
         for (var i=0; i<canvas.width; i++)
         {
-            var sample = this.buffer[parseInt(i*delta)];
+            var p = parseInt(i*delta);
+
+            if (p <= actual)
+            {
+                sample = this.buffer[p];
+            }
+            else
+            {
+                sample = 0;
+            }
+
             ctx.lineTo(i,(sample+1)*72);
         }
+
 
         ctx.lineTo(canvas.width, 72);
 
@@ -268,6 +280,7 @@ function WebTrax(ui) {
     this.trackno=0;
     this.pos=0;
     this.ui = ui;
+    this.longest=0;
 
     this.socket.on('hi', function(msg) {
         this.client_id = msg;
@@ -330,15 +343,27 @@ WebTrax.prototype.addTrack = function(track, track_id)
                                        track: this.packTrackBlob(track, false) });
     }
 
-    track.id = track_id    
+    track.id = track_id;
     console.log("new track with id "  + track_id);
+
+    if (track.buffer.length > this.longest){
+        this.longest = track.buffer.length;
+        console.log("new longest track: " + this.longest);
+
+        // redraw other tracks
+        for (var t in this.trax) {
+            this.trax[t].draw(document.getElementById('wf'+t), this.longest);
+        }
+    }
+
+
     this.trax[track_id]=track;
 
     // replace with UI callback?
     var canvas = document.createElement('canvas');
     canvas.id='wf'+track_id;
     canvas.className='trackwf';
-    track.draw(canvas);
+    track.draw(canvas, this.longest);
     // document.body.appendChild(canvas);
     if (!track.name) { track.name = 'Track ' + track_id }
     if (typeof this.ui.loadNewTrack == 'function') {
