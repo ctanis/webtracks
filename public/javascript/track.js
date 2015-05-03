@@ -12,13 +12,16 @@ var recorder;                   // mic recorder
 var micmonitor;                 
 
 var master;                     // output gain node
-
+var masterReverb;
+var masterEcho;
 
 function track_init() {
     audio = new (window.AudioContext || window.webkitAudioContext)();
     wt = new WebTrax();
 
     master = audio.createGain();
+    master = audio.createDelay(1);
+    
     master.connect(audio.destination);
 
     enableMic();
@@ -104,9 +107,20 @@ function AudioTrack(trackName) {
     this.time_start     = 0;
     this.sample_start   = 0;
     this.sample_end     = 0;
+    this.gain           = 1;
 
     this.gainNode = audio.createGain();
     this.gainNode.connect(master);
+
+    this.setVolume = function(g) {
+        this.gain =g;
+        this.gainNode.gain.value=this.gain;
+    };
+
+    this.getVolume = function() {
+        return this.gainNode.gain.value;j
+    };
+
 
     this.setBuffer = function(buffer) {
 
@@ -116,10 +130,10 @@ function AudioTrack(trackName) {
         this.sample_end=this.buffer.length;
     };
 
+
     this.length = function() {
         return this.sample_end - this.sample_start;
     };
-    
 
 
     this.play = function(sample) {
@@ -250,6 +264,7 @@ function WebTrax() {
         track.time_start = msg.track.time_start;
         track.sample_start = msg.track.sample_start;
         track.sample_end = msg.track.sample_end;
+        track.setVolume(msg.track.gain);
     }.bind(this));
 
 }
@@ -293,6 +308,7 @@ WebTrax.prototype.addTrack = function(track, track_id)
     if (!track.name) { track.name = 'Track ' + track_id }
     ui.loadNewTrack(track);
 };
+
 
 
 WebTrax.prototype.removeTrack = function(track_id, remote)

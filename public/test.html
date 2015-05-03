@@ -1,9 +1,14 @@
 <html>
   <head>
-    <script type="text/javascript" src="/javascript/track.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/bower_components/Recorderjs/recorder.js"></script>
+
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower_components/handlebars/handlebars.min.js"></script>
+    <script type="text/javascript" src="/bower_components/Recorderjs/recorder.js"></script>
+
+    <script type="text/javascript" src="/javascript/ui.js"></script>
+    <script type="text/javascript" src="/javascript/track.js"></script>
+
 
     <script>
       window.onload=track_init;
@@ -24,7 +29,7 @@
     <br>
 
     <div id="recordMic">
-      <input id="rec" type=submit value="record new" onClick="recordNew()" />
+      <input id=".rec" type=submit value="record new" onClick="recordNew()" />
     </div>
     <div id="stopMic">
       <input id="rec" type=submit value="stop recording" onClick="recordStop()" />
