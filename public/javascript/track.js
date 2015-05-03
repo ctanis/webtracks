@@ -196,8 +196,8 @@ function enableMic()  {
 function holdRecorded(buff) {
     
     var track = new AudioTrack();
-    console.log(typeof buff);
-    console.log(buff);
+    // console.log(typeof buff);
+    // console.log(buff);
     track.setBuffer(buff[0]);
     recorder.clear();
     wt.addTrack(track);
@@ -228,7 +228,8 @@ function WebTrax() {
     this.socket.on('addTrack', function(msg) {
         console.log('receiving track ' + msg.id + " -- " + msg.track.name);
 
-        var track = wt.parseTrackBlob(msg);
+        // parse with body
+        var track = wt.parseTrackBlob(msg, false);
         this.addTrack(track, msg.id);
     }.bind(this));
 
@@ -237,6 +238,13 @@ function WebTrax() {
         this.removeTrack(track_id, true);
     }.bind(this));
 
+    this.socket.on('updateTrack', function(msg) {
+        var track = this.trax[msg.id];
+        track.name = msg.track.name;
+        track.time_start = msg.track.time_start;
+        track.sample_start = msg.track.sample_start;
+        track.sample_end = msg.track.sample_end;
+    }.bind(this));
 
 }
 
@@ -264,7 +272,7 @@ WebTrax.prototype.addTrack = function(track, track_id)
 
         // remote track sync(track, track_id)        
         this.socket.emit('addTrack', { id: track_id,
-                                       track: this.packBlob(track) });
+                                       track: this.packTrackBlob(track, false) });
     }
     
     console.log("new track with id "  + track_id);
@@ -293,9 +301,18 @@ WebTrax.prototype.removeTrack = function(track_id, remote)
     }
 }
 
+WebTrax.prototype.updateTrack = function(track_id)
+{
+    var track=this.trax[track_id];
+
+    // pack header only
+    this.socket.emit('updateTrack', {id: track_id,
+                                     track: this.packTrackBlob(track, true)});
+}
 
 
-WebTrax.prototype.parseTrackBlob = function(blob) {
+
+WebTrax.prototype.parseTrackBlob = function(blob, header) {
 
     // console.log("parsing");
     // console.log(blob);
@@ -310,24 +327,29 @@ WebTrax.prototype.parseTrackBlob = function(blob) {
     track.sample_start = tdata.sample_start;
     track.sample_end = tdata.sample_end;
 
-    var buffer = new Float32Array(tdata.data);
-    track.setBuffer(buffer);
-
+    if (!header)
+    {
+        var buffer = new Float32Array(tdata.data);
+        track.setBuffer(buffer);
+    }
     // track.gainNode.set(tdata.gain)
 
     return track;
 };
 
-WebTrax.prototype.packBlob = function(track) {
+WebTrax.prototype.packTrackBlob = function(track, header) {
     var blob= {
         name: track.name,
         time_start: track.time_start,
         sample_start: track.sample_start,
         sample_end: track.sample_end,
-
-        // yes, this has to be buffer.buffer
-        data: track.buffer.buffer
     };
+
+    if (!header)
+    {
+        // yes, this has to be buffer.buffer
+        blob.data = track.buffer.buffer;
+    }
 
     // console.log('packing');
     // console.log(blob);

@@ -5,6 +5,7 @@ var stylus = require('stylus')
 var nib = require('nib')
 
 if (app.get('env') == 'development') {
+    console.log("running with browser-sync: " + app.get('env'));
     var browserSync = require('browser-sync');
     var bs = browserSync({
         files: [ 'public/**/*.js', 'views/**/*.jade', 'stylesheets/**/*.styl' ],
@@ -63,47 +64,21 @@ io.on('connection', function(socket) {
     });
 
     socket.on('removeTrack', function(track_id) {
-
+        console.log('removing track ' + track_id);
         delete trax[track_id];
         socket.broadcast.emit('removeTrack', track_id);
     });
 
 
-    // console.log('a user connected');
-
-    // socket.on('disconnect', function() {
-    //     console.log('a user disconnected');
-    // });
-
-    // socket.on('note', function(msg) {
-    //     console.log('a drum note setting has arrived: ' +msg);
-    //     // io.emit('drum', msg);
-    //     socket.broadcast.emit('note', msg);
-    // });
-
-    // socket.on('sound', function(msg) {
-    //     console.log('a new sound has arrived: ' +msg);
-    //     // io.emit('drum', msg);
-    //     socket.broadcast.emit('sound', msg);
-    // });
-
-    // socket.on('presound', function(msg) {
-    //     console.log('load preset: ' +msg);
-    //     // io.emit('drum', msg);
-    //     socket.broadcast.emit('presound', msg);
-    // });
-
-    // socket.on('tempo', function(msg) {
-    //     // console.log('tempo change: ' +msg);
-    //     // io.emit('drum', msg);
-    //     socket.broadcast.emit('tempo', msg);
-    // });
-
-    // socket.on('sync', function(msg) {
-    //     console.log('sync');
-    //     socket.broadcast.emit('sync');
-    //     socket.emit('sync');
-    // });
+    socket.on('updateTrack', function(msg) {
+        console.log('updating track ' + msg.id);
+        var track = trax[msg.id];
+        track.name = msg.track.name;
+        track.time_start = msg.track.time_start;
+        track.sample_start = msg.track.sample_start;
+        track.sample_end = msg.track.sample_end;
+        socket.broadcast.emit('updateTrack', msg);
+    });
 
 
 
