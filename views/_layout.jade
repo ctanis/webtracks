@@ -14,3 +14,8 @@ html.no-js(lang="en")
     script(src='/javascript/track.js')
     script(src='/javascript/main.js')
     script(src='/javascript/controls.js')
+    if (NODE_ENV == 'development')
+      script(id="__bs_script__")
+        //<![CDATA[
+          document.write("<script async src='http://HOST:3001/browser-sync/browser-sync-client.2.6.9.js'><\/script>".replace("HOST", location.hostname));
+        //]]>

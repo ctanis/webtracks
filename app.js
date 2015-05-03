@@ -1,14 +1,23 @@
 var express = require('express');
 var app = express();
-var trax={};
+var trax = {};
 var stylus = require('stylus')
 var nib = require('nib')
+
+if (app.get('env') == 'development') {
+    var browserSync = require('browser-sync');
+    var bs = browserSync({
+        files: [ 'public/**/*.js', 'views/**/*.jade', 'stylesheets/**/*.styl' ],
+        browser: ['google chrome']
+    });
+    app.use(require('connect-browser-sync')(bs));
+}
 
 app.set('views', './views');
 app.set('view engine', 'jade');
 
 app.use(stylus.middleware({
-    src: __dirname + '/source/stylesheets',
+    src: __dirname + '/stylesheets',
     dest: __dirname + '/public/stylesheets',
     compile: function (str, path) {
         return stylus(str).set('filename', path).use(nib())
@@ -26,8 +35,8 @@ var io = require('socket.io')(http);
 
 var client_no=0;
 
-http.listen(8080, function() {
-    console.log('listening on *:8080');
+http.listen(3000, function() {
+    console.log('listening on *:3000');
 })
 
 
