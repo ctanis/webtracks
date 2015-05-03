@@ -175,7 +175,7 @@ function AudioTrack(trackName) {
     this.draw = function(canvas) {
         this.canvas = canvas;
 
-        canvas.height=200;      //fix me
+        canvas.height=144;      //fix me
 
         var delta=waveFormScale;
         canvas.width=this.buffer.length / delta;
@@ -183,21 +183,21 @@ function AudioTrack(trackName) {
         var ctx = canvas.getContext("2d");
 
         ctx.beginPath();
-        ctx.moveTo(0, 100);
+        ctx.moveTo(0, 72);
 
         var c=0;
 
         for (var i=0; i<canvas.width; i++)
         {
             var sample = this.buffer[parseInt(i*delta)];
-            ctx.lineTo(i,(sample+1)*100);
+            ctx.lineTo(i,(sample+1)*72);
         }
 
-        ctx.lineTo(canvas.width, 100);
+        ctx.lineTo(canvas.width, 72);
 
         // waveform colors
         ctx.strokeStyle = '#ddd';
-        ctx.fillStyle = '#f22';
+        ctx.fillStyle = '#333';
         ctx.fill();
     };
 
