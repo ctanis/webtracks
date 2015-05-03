@@ -4,8 +4,7 @@ var trax = {};
 var stylus = require('stylus')
 var nib = require('nib')
 
-if (app.get('env') == 'development') {
-    console.log("running with browser-sync: " + app.get('env'));
+if (process.env.NODE_ENV == 'development') {
     var browserSync = require('browser-sync');
     var bs = browserSync({
         files: [ 'public/**/*.js', 'views/**/*.jade', 'stylesheets/**/*.styl' ],

@@ -4,14 +4,17 @@ var ui = {
   // METHODS:
   loadNewTrack: function (track) {
     var newTrackTemplate = Handlebars.compile($("#track-template").html())
-    this.tracks.append(newTrackTemplate(track))
+    var newTrack = $(newTrackTemplate(track))
+    newTrack.find('.waveform-wrapper').append(track.canvas)
+    this.tracks.append(newTrack)
+
   },
   toggleEffects: function () {
     var effectControls = $(this).parents('.track').find('.track-effects')
     effectControls.toggleClass('open')
   },
   init: function () {
-    this.loadNewTrack(this.dummyTrack)
+    // this.loadNewTrack(this.dummyTrack)
   },
   // FOR TESTING PURPOSES ONLY:
   dummyTrack: {

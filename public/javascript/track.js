@@ -94,9 +94,9 @@ BufferStreamer.prototype.onprocess = function(e) {
 
 
 
-function AudioTrack() {
+function AudioTrack(trackName) {
 
-    this.name           = "New"; //channel name
+    this.name           = trackName || 'New Track by [user_name]'; //channel name
     this.buffer         = null;
     this.stream         = null;
     this.time_start     = 0;
@@ -198,8 +198,8 @@ function enableMic()  {
 
 
 function holdRecorded(buff) {
-    
-    var track = new AudioTrack();
+
+    var track = new AudioTrack($('#recording-name').val());
     // console.log(typeof buff);
     // console.log(buff);
     track.setBuffer(buff[0]);
@@ -287,7 +287,8 @@ WebTrax.prototype.addTrack = function(track, track_id)
     canvas.id='wf'+track_id;
     canvas.className='trackwf';
     track.draw(canvas);
-    document.body.appendChild(canvas);
+    // document.body.appendChild(canvas);
+    ui.loadNewTrack(track);
 };
 
 
