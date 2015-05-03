@@ -114,7 +114,6 @@ var ui = {
     var pagePos = event.pageX
     var relativePos = pagePos - 288 // offset track controls
     var position = relativePos / stageWidth
-    console.log(stageWidth)
     wt.play(position)
   },
 
