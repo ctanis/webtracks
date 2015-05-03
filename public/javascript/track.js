@@ -333,7 +333,7 @@ WebTrax.prototype.play = function(pct) {
 
     if (typeof pct === 'number')
     {
-        start = pct * this.longest;
+        start = parseInt(pct * this.longest);
     }
     else
     {
